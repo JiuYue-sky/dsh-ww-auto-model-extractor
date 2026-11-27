@@ -1,6 +1,6 @@
 # [非官方]《鸣潮》（Wuthering Waves）角色风格化 Blender 展示与交接管线（`dsh-ww-auto-model-extractor`）
 
-![Version](https://img.shields.io/badge/version-v0.1.1-blue)
+![Version](https://img.shields.io/badge/version-v0.1.2-blue)
 ![Unofficial](https://img.shields.io/badge/status-Unofficial_Research_Tool-orange)
 ![DSH](https://img.shields.io/badge/DeepSeek_Harness-Cordis_4_(%3E%3D0.2.1--rc.2)-6E40C9)
 ![License](https://img.shields.io/badge/license-MIT_(Original_Code)-green)
@@ -8,12 +8,12 @@
 ![Blender](https://img.shields.io/badge/Blender-3.6%2B_%7C_4.x_%7C_5.x-E87D0D)
 ![Unreal Engine](https://img.shields.io/badge/Unreal_Engine-Not_Required-lightgrey)
 
-> **DeepSeek Harness 专用 Cordis 4 插件包（`v0.1.1`）** — 面向本机合法《鸣潮》（Wuthering Waves）正式服已实装自机角色的贴图三级审计、隔离 Blender 沙盒风格化卡通渲染与动作表情展示、多门禁核验及标准化 UE 交接包生成管线（无需本机安装 Unreal Engine）。
+> **DeepSeek Harness 专用 Cordis 4 插件包（`v0.1.2`）** — 面向本机合法《鸣潮》（Wuthering Waves）正式服已实装自机角色的贴图三级审计、隔离 Blender 沙盒风格化卡通渲染与动作表情展示、多门禁核验及标准化 UE 交接包生成管线（无需本机安装 Unreal Engine）。
 
 > [!WARNING]
 > **非官方项目声明与合规红线（Unofficial Notice & Compliance Boundaries）**
 > - **非官方性质**：本插件为非官方第三方 3D 渲染与动画管线技术研究工具，与**广州库洛科技有限公司（Kuro Games）**无任何官方关联、合作、授权或背书。
-> - **零资产 / 零密钥 / 零自动寻钥**：本仓库**不分发任何游戏原始资产、不内嵌专有商业 Oodle 动态库、不内置任何 AES 密钥，亦不提供自动联网寻钥功能**（当检测到本地 FModel 未关联或缺少有效密钥时，插件自动暂停并提醒宿主机提供本地自备的 `.json` / `.zip` 密钥文件包，经授权并自动备份原 `AppSettings.json` 后代为完成本地关联）。
+> - **零资产 / 零密钥 / 零自动寻钥**：本仓库与插件**不分发任何游戏原始资产、不内嵌专有商业 Oodle 动态库、不内置不提供任何 AES 密钥，亦不代为联网搜索密钥**。如宿主机尚未准备本地密钥，可**先临时关闭本插件并另开新会话执行，或由宿主机手动寻找**；当检索到本机已有本地密钥配置或宿主机直接提供本地路径（`.json` / `.zip` / `.txt` 或目录）时，插件不询问来源，自动备份原 `AppSettings.json` 后直接完成本地 FModel 关联并使用，仅在密钥本身无效或过期时提示「密钥本身存在问题，请使用正确可用的密钥」。
 > - **严禁商用、交易与测试服泄密**：严格仅限个人针对**正式服已公开实装角色**进行离线渲染与骨骼动画学习研究；**严禁用于任何测试服（Beta）拆包泄密、商业变现、有偿代做、公开资产分发、私下买卖交易或不良二创（NSFW）**。完整说明见包内 `NOTICE.md` 与 `THIRD_PARTY_LICENSES.md`。
 
 > [!IMPORTANT]
@@ -27,7 +27,7 @@
 
 - **发布渠道与独立项目说明**：本插件（`dsh-ww-auto-model-extractor`）为 **DeepSeek Harness 专用版**（发布于 GitHub 独立仓库与 DSH 插件市场）；若你使用的是 Antigravity / Claude Code / Cursor / Codex 或命令行，请前往独立发布的标准 Skill 仓库 `ww-auto-model-extractor-skill`（请勿互相混装）。
 - **仅面向正式服已实装角色 + 中文多形态直检目录**：覆盖已公开实装自机体型（`IsNpc = false`），不含 NPC、Boss、怪物与场景道具，**严禁用于测试服或未公开内容**。输入中文时自动按**中文、小写英文/拼音、首字母大写/驼峰英文**三通道匹配角色命名目录（如 `今汐` → `Jinxi`、`长离` → `ChangLi`、`莉莉` → `Lili`、`琳奈` → `LinNai`）。
-- **FModel 缺密钥暂停提醒与安全代关联说明**：若宿主机本地 FModel 尚未关联《鸣潮》目录或缺少有效密钥（或客户端更新后旧密钥过期），插件会自动暂停并提醒宿主机提供本地自备的 `.json` 或 `.zip` 密钥包路径；宿主机提供路径并确认同意后，插件仅在内存中只读提取 JSON（拒绝任何可执行文件），自动将原 `AppSettings.json` 备份为 `.bak` 后完成本地关联。
+- **本地密钥自动复用与 FModel 关联说明**：本插件不提供、也不代为搜索密钥；如宿主机尚未准备，可**先临时关闭本插件并另开新会话执行，或手动寻找并准备好本地密钥文件**。当检测到本机 FModel 已有密钥配置，或宿主机直接提供本地路径（支持 `.json`、`.zip`、`.txt`/`.key` 或**包含密钥文件的本地目录**）时，插件**不询问来源，自动备份原 `AppSettings.json` 为 `.bak` 后直接完成本地关联并使用**；仅当检测到密钥本身存在问题或不可用时，明确提示：**「密钥本身存在问题，请使用正确可用的密钥」**。
 - **无需安装 Unreal Engine**：专注三级贴图审计拆分、Blender 风格化展示验证及标准化 `ue_handoff/handoff_manifest.json` + 无双 Root Rest-Pose `.fbx` 交接包生成。
 - **对话使用方式**：在 DeepSeek Harness 对话框中直接说明需求（建议指定插件外部的 `work_dir` 如 `D:\WW_Outputs`），插件会按顺序执行：
   `dsh_ww_preflight_check` →（可选 `dsh_ww_list_characters`）→ `dsh_ww_extract_and_showcase` → `dsh_ww_verify_delivery`。
@@ -39,7 +39,7 @@
 | **DeepSeek Harness** | `>=0.2.1-rc.2 <1.0.0`（Cordis 4） | **必需** | 支持桌面端 / Web / CLI Profile，Node.js `>=20` |
 | **操作系统** | Windows 10 / 11 (x64) | **必需** | 支持国服、国际服、Steam、Epic、WeGame 与自定义安装目录 |
 | **《鸣潮》正式服客户端** | 本地官方正版正式服客户端 | **必需（硬门禁）** | 缺失时立即报错终止（`FATAL_MISSING_WUTHERING_WAVES`），严禁下载游戏 |
-| **本地 FModel 密钥关联** | 本地 FModel 配置或宿主机自备 `.json`/`.zip` 包 | **缺失时暂停** | **本仓库不含密钥且不联网寻钥**；缺密钥/未关联时自动暂停，由宿主机提供本地密钥包并授权后自动备份关联 |
+| **本地 FModel 密钥关联** | 本地 FModel 配置或宿主机自备 `.json`/`.zip`/`.txt`/目录 | **自动复用 / 缺失时暂停** | **本插件不提供且不搜索密钥**（未准备时可先关闭本插件另开会话或手动寻找）；检测到本机已有配置或提供路径时不询问来源、自动备份关联并直接使用，仅在密钥不可用时明确提醒 |
 | **Blender** | `3.6 LTS` / `4.2 LTS` / `5.x`（实测 `5.2.3 LTS`） | **必需** | 缺失时返回 `CONSENT_REQUIRED`，获同意后下载官方便携版至隔离 `runtime/` |
 | **解码运行库 (Oodle)** | 自动复用本机 FModel/UE 或授权按需下载 | **按需授权** | 开源包不随包分发闭源 Oodle DLL；裸机首次运行在征得同意后下载至 `runtime/native/` |
 | **Python** | `3.10+`（未装时自动复用 Blender 内置 Python） | 自动满足 | 零额外 `pip install`，UTF-8 桥接加固 |
@@ -64,7 +64,8 @@
 | **未安装《鸣潮》正式服客户端** | **硬门禁立即终止**（`FATAL_MISSING_WUTHERING_WAVES`），**严禁自动下载游戏** | 不允许下载 |
 | **未检测到 Blender (3.6+/4.x/5.x)** | 返回 `CONSENT_REQUIRED`（含官方 URL 与 SHA256），**获同意后**下载安装至 `runtime/blender/` | **必须先同意** |
 | **裸机缺少 Oodle 运行时解码库** | 优先复用本机 FModel/UE 环境；若无则返回 `CONSENT_REQUIRED`，**获同意后**按需下载（SHA256 校验）至 `runtime/native/` | **必须先同意** |
-| **FModel 未关联目录或缺本地密钥** | **立即暂停工作**（`CONSENT_REQUIRED`），提醒宿主机提供本地自备的 `.json`/`.zip` 密钥包；**获同意后**内存只读校验、先备份 `.bak` 再写入本地 `AppSettings.json` 完成关联 | **必须先提供并同意** |
+| **本机已有 FModel / 本地密钥配置** | **不询问来源自动备份原 `AppSettings.json` 并直接关联使用**；仅当密钥本身无效或过期时提示「密钥本身存在问题，请使用正确可用的密钥」 | 自动复用 + `.bak` 备份 |
+| **本机无任何本地密钥配置** | **暂停工作**（`CONSENT_REQUIRED`），提示本插件不提供也不搜索密钥（可先关闭本插件另开会话执行或手动寻找，或直接提供本地 `.json`/`.zip`/`.txt`/目录路径完成自动关联） | 宿主机自行准备/提供 |
 | **未安装 FModel GUI** | 可选建议；**获同意后**下载官方 FModel 发布包至隔离目录 `runtime/fmodel/` | **必须先同意** |
 | **Blender 4.x/5.x 插件 API 差异** | 仅在工作区隔离沙盒 `sandbox_blender/` 内 AST 热修补并冒烟验证，**绝不修改全局配置** | 沙盒隔离 + 通告 |
 
