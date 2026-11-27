@@ -1,0 +1,8 @@
+# DeepSeek Harness Cordis bundle patch for dsh-ww-auto-model-extractor
+# Mounts the [Unofficial] Wuthering Waves Stylized Blender Showcase & Handoff tools + embedded SOP skill.
+- insert:
+    - id: ww-auto-model-extractor
+      name: dsh-ww-auto-model-extractor
+      config:
+        enabled: true
+        maxAnims: 6

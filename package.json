@@ -1,0 +1,105 @@
+{
+  "name": "dsh-ww-auto-model-extractor",
+  "version": "0.1.1",
+  "displayName": "《鸣潮》（Wuthering Waves）角色风格化 Blender 展示与交接管线（非官方）",
+  "description": "【非官方】面向本机合法《鸣潮》（Wuthering Waves）正式服已实装自机角色的贴图三级审计、隔离 Blender 沙盒风格化卡渲与动作表情展示、多门禁核验及标准化 UE 交接包管线（无需本机安装 UE）。",
+  "type": "module",
+  "main": "lib/index.js",
+  "icon": "icon.png",
+  "license": "MIT AND Apache-2.0 AND GPL-3.0-or-later",
+  "author": "JiuYue <jiuyue200712@gmail.com>",
+  "homepage": "https://github.com/JiuYue-sky/dsh-ww-auto-model-extractor#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JiuYue-sky/dsh-ww-auto-model-extractor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JiuYue-sky/dsh-ww-auto-model-extractor/issues",
+    "email": "jiuyue200712@gmail.com"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "鸣潮",
+    "风格化展示",
+    "卡通渲染",
+    "动作展示",
+    "技术美术",
+    "wuthering-waves",
+    "blender",
+    "ueformat",
+    "3d-pipeline"
+  ],
+  "exports": {
+    ".": "./lib/index.js",
+    "./locale/*": "./locale/*",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./tools.schema.json": "./tools.schema.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/",
+    "locale/",
+    "skills/",
+    "core/",
+    "!core/**/__pycache__/**",
+    "!core/**/*.pyc",
+    "bin/",
+    "bundled_addons/",
+    "!bundled_addons/**/__pycache__/**",
+    "!bundled_addons/**/*.pyc",
+    "docs/",
+    "assets/",
+    "cordis.patch.yml",
+    "orchestrator.py",
+    "tools.schema.json",
+    "icon.png",
+    "README.md",
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
+    "NOTICE.md",
+    "THIRD_PARTY_LICENSES.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20",
+    "dsh": ">=0.2.1-rc.2 <0.2.2 || >=0.2.2-0 <0.2.3 || >=0.2.3-0 <0.3.0 || >=0.3.0-0 <1.0.0"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/dsh-tools": ">=0.1.7-rc.1 <0.2.0 || >=0.2.0-0 <0.2.1 || >=0.2.1-0 <0.2.2 || >=0.2.2-0 <1.0.0",
+    "@deepseek-ai/dsh-skill": ">=0.1.7-rc.1 <0.2.0 || >=0.2.0-0 <0.2.1 || >=0.2.1-0 <0.2.2 || >=0.2.2-0 <1.0.0",
+    "@deepseek-ai/schemastery": ">=3.18.4 <4"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": { "optional": true },
+    "@deepseek-ai/dsh-tools": { "optional": true },
+    "@deepseek-ai/dsh-skill": { "optional": true },
+    "@deepseek-ai/schemastery": { "optional": true }
+  },
+  "dsh": {
+    "manifestVersion": 1,
+    "bundle": {
+      "platforms": ["win32"],
+      "patch": "./cordis.patch.yml",
+      "listedByDefault": true
+    },
+    "permissions": {
+      "filesystem": "workspace_and_isolated_sandbox_only",
+      "process_spawn": ["python", "blender", "bin/ww-extract/ww-extract.exe"],
+      "network_outbound": [
+        "https://download.blender.org (only_with_explicit_host_consent)",
+        "https://github.com/WorkingRobot/OodleUE (only_with_explicit_host_consent)",
+        "https://api.github.com/repos/4sval/FModel (only_with_explicit_host_consent)"
+      ],
+      "never_auto_download_game": true,
+      "never_mutate_host_blender_global": true,
+      "no_bundled_or_remote_aes_keys": true
+    }
+  },
+  "scripts": {
+    "test": "node tests/test_dsh_contract.mjs"
+  }
+}

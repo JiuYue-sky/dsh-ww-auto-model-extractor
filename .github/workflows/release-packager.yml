@@ -1,0 +1,51 @@
+name: Release Packager (DSH Plugin)
+
+on:
+  push:
+    tags:
+      - "v*"
+      - "dsh-v*"
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run Package Self-Audit
+        run: python -c "from pathlib import Path; from core.self_audit import run_package_self_audit; r = run_package_self_audit(Path('.'), check_binary=True); print(r); assert r['status'] == 'PASS'"
+      - name: Run DSH Contract & Asset Validation
+        run: node tests/test_dsh_contract.mjs
+      - name: Run Python Core Tests
+        run: python -m unittest discover -s tests -p "test_*.py" -v
+      - name: Build DSH Plugin Archive & SHA256
+        shell: pwsh
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          $tag = $env:TAG_NAME -replace '^dsh-',''
+          if ($tag -notmatch '^[A-Za-z0-9._-]+$') { throw "Unsafe tag name: $tag" }
+          Get-ChildItem -Recurse -Directory -Filter '__pycache__' -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force
+          Get-ChildItem -Recurse -File -Filter '*.pyc' -ErrorAction SilentlyContinue | Remove-Item -Force
+          Remove-Item -Recurse -Force -ErrorAction SilentlyContinue output,sandbox_blender,runtime
+          New-Item -ItemType Directory -Force dist | Out-Null
+          $zip = "dist/dsh-ww-auto-model-extractor-$tag.zip"
+          Compress-Archive -Path package.json,cordis.patch.yml,tools.schema.json,orchestrator.py,icon.png,README.md,CHANGELOG.md,SECURITY.md,CONTRIBUTING.md,NOTICE.md,THIRD_PARTY_LICENSES.md,LICENSE,lib,locale,skills,assets,core,bin,bundled_addons,docs,tests -DestinationPath $zip -Force
+          (Get-FileHash $zip -Algorithm SHA256).Hash.ToLower() + "  " + (Split-Path $zip -Leaf) | Out-File "$zip.sha256" -Encoding ascii
+          npm pack --pack-destination dist
+          Get-ChildItem dist/*.tgz | ForEach-Object {
+            (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower() + "  " + $_.Name | Out-File "$($_.FullName).sha256" -Encoding ascii
+          }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dsh-plugin-release
+          path: dist/*

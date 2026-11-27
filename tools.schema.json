@@ -1,0 +1,143 @@
+{
+  "schema_version": "0.1.1",
+  "plugin": "dsh-ww-auto-model-extractor",
+  "tools": [
+    {
+      "name": "dsh_ww_self_audit",
+      "description": "Run internal compliance & health self-audit on dsh-ww-auto-model-extractor (Python/JS syntax, DSH manifest contract, open-source decoders Zlib/Detex/ACL, third-party licenses, zero proprietary Oodle/key/URL leak scan).",
+      "parameters": {}
+    },
+    {
+      "name": "dsh_ww_preflight_check",
+      "description": "Stage 0 Preflight Gate: MUST be called BEFORE asking for a character name. Runs package self-audit, detects local official Wuthering Waves client (aborts if missing; NEVER downloads game), checks Blender/Oodle and FModel link/keys (pauses if FModel is unlinked or lacks keys so host can supply local .json/.zip key package), and runs isolated Blender sandbox smoke test.",
+      "parameters": {
+        "game_dir": {
+          "type": "string",
+          "required": false,
+          "description": "Optional explicit path to local official Wuthering Waves installation."
+        },
+        "blender_path": {
+          "type": "string",
+          "required": false,
+          "description": "Optional explicit path to blender.exe."
+        },
+        "fmodel_dir": {
+          "type": "string",
+          "required": false,
+          "description": "Optional explicit path to local FModel directory or FModel.exe."
+        },
+        "keys_file": {
+          "type": "string",
+          "required": false,
+          "description": "Host-provided local .json or .zip key package path (parsed safely in memory; combine with consent_link_fmodel=true to backup AppSettings.json and link FModel)."
+        },
+        "work_dir": {
+          "type": "string",
+          "required": false,
+          "description": "Optional output working directory (recommended outside plugin install directory)."
+        },
+        "consent_download": {
+          "type": "string",
+          "required": false,
+          "description": "ONLY pass after explicit user approval! Comma-separated: blender,oodle,fmodel (never game)."
+        },
+        "consent_link_fmodel": {
+          "type": "boolean",
+          "required": false,
+          "default": false,
+          "description": "ONLY set true after explicit user approval to backup AppSettings.json and write local WW directory + host-provided AesKeys into FModel."
+        }
+      }
+    },
+    {
+      "name": "dsh_ww_list_characters",
+      "description": "List officially released playable characters mounted in the host machine's local Wuthering Waves client (pauses if local FModel lacks valid keys so host can supply a local .json/.zip key package).",
+      "parameters": {
+        "query": {
+          "type": "string",
+          "required": false,
+          "description": "Optional character filter (Chinese input matches naming folders across Chinese, lowercase English/Pinyin, and Capitalized/PascalCase variants, e.g. 今汐->Jinxi, 长离->ChangLi, 莉莉->Lili, 琳奈->LinNai; also accepts English/ModelId)."
+        },
+        "keys_file": {
+          "type": "string",
+          "required": false,
+          "description": "Optional path to host-provided local .json or .zip key package."
+        },
+        "work_dir": {
+          "type": "string",
+          "required": false,
+          "description": "Optional workspace directory matching Stage 0."
+        }
+      }
+    },
+    {
+      "name": "dsh_ww_extract_and_showcase",
+      "description": "Execute full verified stylized showcase & handoff pipeline for a released Wuthering Waves character: local key check -> parsing -> 3-tier texture audit (_N split, _SDF correlation) -> sandboxed Blender stylized toon shader + in-game animation/ribbon/facial shape keys + motion verification + preview renders + Rest-Pose FBX roundtrip -> handoff_manifest.json & Delivery Report.",
+      "parameters": {
+        "character": {
+          "type": "string",
+          "required": true,
+          "description": "Target released playable character name (e.g. 今汐, 长离, 守岸人, 爱弥斯, 莉莉, Jinxi, Lili, or ModelId)."
+        },
+        "model_path": {
+          "type": "string",
+          "required": false,
+          "description": "Optional exact VFS .uasset path for released alternate outfits."
+        },
+        "anim_names": {
+          "type": "string",
+          "required": false,
+          "description": "Optional comma-separated specific animation names."
+        },
+        "max_anims": {
+          "type": "integer",
+          "required": false,
+          "default": 6,
+          "description": "Max animations to assemble (default 6)."
+        },
+        "keys_file": {
+          "type": "string",
+          "required": false,
+          "description": "Optional host-provided local .json or .zip key package path."
+        },
+        "consent_link_fmodel": {
+          "type": "boolean",
+          "required": false,
+          "default": false,
+          "description": "ONLY set true after explicit user approval to backup AppSettings.json and link host-provided keys to local FModel."
+        },
+        "game_dir": {
+          "type": "string",
+          "required": false,
+          "description": "Optional explicit WW directory."
+        },
+        "blender_path": {
+          "type": "string",
+          "required": false,
+          "description": "Optional explicit blender.exe path."
+        },
+        "fmodel_dir": {
+          "type": "string",
+          "required": false,
+          "description": "Optional explicit FModel directory or FModel.exe path."
+        },
+        "work_dir": {
+          "type": "string",
+          "required": false,
+          "description": "Optional workspace output directory."
+        }
+      }
+    },
+    {
+      "name": "dsh_ww_verify_delivery",
+      "description": "Verify an existing character deliverable directory (checks showcase .blend, preview PNGs, handoff .fbx, handoff_manifest.json, DELIVERY_REPORT.md, and runs plugin self-audit).",
+      "parameters": {
+        "deliverable_dir": {
+          "type": "string",
+          "required": true,
+          "description": "Path to the character deliverable directory containing delivery_summary.json."
+        }
+      }
+    }
+  ]
+}
